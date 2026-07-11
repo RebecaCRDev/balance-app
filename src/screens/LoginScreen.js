@@ -10,8 +10,10 @@ import {
   View,
 } from "react-native";
 import { login } from "../api/client";
+import { useAuth } from "../context/AuthContext";
 
 export default function LoginScreen() {
+  const { iniciarSesion } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cargando, setCargando] = useState(false);
@@ -24,10 +26,9 @@ export default function LoginScreen() {
     setCargando(true);
     try {
       const data = await login(email.trim(), password);
-      Alert.alert("Balance", `Bienvenida, ${data.nombre}!`);
+      await iniciarSesion(data);
     } catch (e) {
       Alert.alert("Balance", e.message);
-    } finally {
       setCargando(false);
     }
   };
