@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -16,7 +17,7 @@ import {
 } from "../api/client";
 import { useAuth } from "../context/AuthContext";
 
-export default function DashboardScreen() {
+export default function DashboardScreen({ navigation }) {
   const { usuario, token, cerrarSesion } = useAuth();
   const [habitos, setHabitos] = useState([]);
   const [progreso, setProgreso] = useState(null);
@@ -35,9 +36,11 @@ export default function DashboardScreen() {
     }
   }, [token]);
 
-  useEffect(() => {
-    cargarDatos();
-  }, [cargarDatos]);
+  useFocusEffect(
+    useCallback(() => {
+      cargarDatos();
+    }, [cargarDatos])
+  );
 
   const onRefresh = async () => {
     setRefrescando(true);
@@ -101,7 +104,7 @@ export default function DashboardScreen() {
         }
         ListEmptyComponent={
           <Text style={styles.vacio}>
-            Aun no tienes habitos. Crea el primero!
+            Aun no tienes habitos. Crea el primero con el boton +
           </Text>
         }
         renderItem={({ item }) => (
@@ -128,6 +131,13 @@ export default function DashboardScreen() {
           </TouchableOpacity>
         )}
       />
+
+      <TouchableOpacity
+        style={styles.botonFlotante}
+        onPress={() => navigation.navigate("NuevoHabito")}
+      >
+        <Text style={styles.botonFlotanteTexto}>+</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -191,4 +201,17 @@ const styles = StyleSheet.create({
     color: "#9b8a92",
   },
   vacio: { textAlign: "center", color: "#8a707c", marginTop: 40 },
+  botonFlotante: {
+    position: "absolute",
+    right: 24,
+    bottom: 32,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#b98a9b",
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 4,
+  },
+  botonFlotanteTexto: { color: "#ffffff", fontSize: 32, lineHeight: 36 },
 });
