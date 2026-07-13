@@ -1,4 +1,4 @@
-const API_URL = "http://192.168.1.135:8080/api";
+const API_URL = "https://balance-api-blau.onrender.com/api";
 
 async function request(path, options = {}) {
   const res = await fetch(`${API_URL}${path}`, {
