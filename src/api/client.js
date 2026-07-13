@@ -1,4 +1,4 @@
-const API_URL = "http://192.168.1.158:8080/api";
+const API_URL = "http://192.168.1.135:8080/api";
 
 async function request(path, options = {}) {
   const res = await fetch(`${API_URL}${path}`, {
